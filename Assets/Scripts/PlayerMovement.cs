@@ -171,8 +171,8 @@ public class PlayerMovement : MonoBehaviour
         }
         animator.SetFloat(YVelF, _yVelocity);
         _yVelocity = 0f;
-        _canMove = false;
-        Invoke(nameof(AllowMove), .5f);
+        //_canMove = false;
+        //Invoke(nameof(AllowMove), .5f);
     }
 
     private void AllowMove()
