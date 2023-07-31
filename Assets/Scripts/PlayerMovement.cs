@@ -9,7 +9,7 @@ public class PlayerMovement : MonoBehaviour
 {
     [SerializeField] private GameInput gameInput;
     
-    [SerializeField] private float moveSpeed = 1.5f;
+    [SerializeField] private float moveSpeed = 3f;
     [SerializeField] private float jumpForce = 14;
     [SerializeField] private float friction = 0.6f;
     [SerializeField] private float maxSpeed = 5;
@@ -17,6 +17,8 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private Rigidbody playerRigidbody;
     [SerializeField] private Animator animator;
     [SerializeField] private AudioSource jumpAudio;
+    [SerializeField] private ParticleSystem jumpParticles;
+    [SerializeField] private ParticleSystem landingParticles;
     [SerializeField] private AudioSource attackAudio;
 
     private float _coyoteTime = 0.2f;
@@ -30,13 +32,13 @@ public class PlayerMovement : MonoBehaviour
     private float _yVelocity;
     private bool _canMove = true;
 
-    private float _normalWalkSpeed = 1.5f;
-    private float _sprintSpeed = 3f;
+    private float _normalWalkSpeed = 3f;
     private static readonly int YVelF = Animator.StringToHash("yVel_f");
     private static readonly int Sprint = Animator.StringToHash("Sprint");
     private static readonly int Walk = Animator.StringToHash("Walk");
     private static readonly int Grounded = Animator.StringToHash("Grounded");
     private static readonly int JumpTrig = Animator.StringToHash("Jump");
+    private static readonly int Attack = Animator.StringToHash("Attack");
 
     public static PlayerMovement Instance { get; private set; }
 
@@ -98,16 +100,6 @@ public class PlayerMovement : MonoBehaviour
             _coyoteTimeCounter = 0f;
         }
 
-        if (Input.GetKey(KeyCode.LeftShift))
-        {
-            moveSpeed = _sprintSpeed;
-            animator.SetBool(Sprint, true);
-        } else
-        {
-            moveSpeed = _normalWalkSpeed;
-            animator.SetBool(Sprint, false);
-        }
-
         animator.SetBool(Walk, gameInput.GetMovementDirectionNormalized().x != 0);
         animator.SetBool(Grounded, _grounded);
 
@@ -117,7 +109,7 @@ public class PlayerMovement : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
         {
             //attackAudio.Play();
-            //animator.SetTrigger("Attack");
+            animator.SetTrigger(Attack);
         }
         //}
 
@@ -127,6 +119,7 @@ public class PlayerMovement : MonoBehaviour
     {
         //jumpAudio.Play();
         animator.SetTrigger(JumpTrig);
+        jumpParticles.Play();
         playerRigidbody.AddForce(0, jumpForce, 0, ForceMode.VelocityChange);
     }
 
@@ -165,12 +158,13 @@ public class PlayerMovement : MonoBehaviour
         {
             return;
         }
+        landingParticles.Play();
+        animator.SetFloat(YVelF, _yVelocity);
+        _yVelocity = 0f;
         if (_grounded)
         {
             return;
         }
-        animator.SetFloat(YVelF, _yVelocity);
-        _yVelocity = 0f;
         //_canMove = false;
         //Invoke(nameof(AllowMove), .5f);
     }
