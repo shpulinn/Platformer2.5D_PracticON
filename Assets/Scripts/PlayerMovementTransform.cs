@@ -133,7 +133,9 @@ public class PlayerMovementTransform : MonoBehaviour
         
         transform.Translate(movement * moveSpeed * Time.deltaTime);
 
-        _animator.SetBool(Walk, gameInput.GetMovementDirectionNormalized().x != 0);
+        // _animator.SetBool(Walk, gameInput.GetMovementDirectionNormalized().x != 0);
+        _animator.SetBool(Walk, rb.velocity != Vector3.zero);
+        Debug.Log(rb.velocity);
     }
 
     void OnCollisionEnter(Collision other)
