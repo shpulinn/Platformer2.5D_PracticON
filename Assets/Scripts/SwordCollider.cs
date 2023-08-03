@@ -1,10 +1,8 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class SwordCollider : MonoBehaviour
 {
+    [SerializeField] private AudioClip damageSound;
     [SerializeField] private int damageValue;
 
     public int GetDamage => damageValue;
@@ -20,6 +18,8 @@ public class SwordCollider : MonoBehaviour
         if (enemyHealth)
         {
             enemyHealth.TakeDamage(damageValue);
+            
+            AudioSource.PlayClipAtPoint(damageSound, transform.position);
         }
     }
 
