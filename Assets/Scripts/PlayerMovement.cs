@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
+using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -39,6 +41,7 @@ public class PlayerMovement : MonoBehaviour
     private static readonly int Grounded = Animator.StringToHash("Grounded");
     private static readonly int JumpTrig = Animator.StringToHash("Jump");
     private static readonly int Attack = Animator.StringToHash("Attack");
+    private static readonly int Dead = Animator.StringToHash("Dead");
 
     public static PlayerMovement Instance { get; private set; }
 
@@ -52,6 +55,8 @@ public class PlayerMovement : MonoBehaviour
         {
             Destroy(gameObject);
         }
+
+        Time.timeScale = 1f;
     }
 
     private void Start()
@@ -61,7 +66,10 @@ public class PlayerMovement : MonoBehaviour
 
     private void GameInputOnOnJumpAction(object sender, EventArgs e)
     {
-        Jump();
+        if (_canMove == false)
+        {
+            return;
+        }
         _jumpPressed = true;
     }
 
@@ -76,8 +84,6 @@ public class PlayerMovement : MonoBehaviour
         else
         {
             _coyoteTimeCounter -= Time.deltaTime;
-
-            _yVelocity = playerRigidbody.velocity.y;
         }
 
         if (_jumpPressed)
@@ -94,6 +100,7 @@ public class PlayerMovement : MonoBehaviour
         {
             _jumpFramesTimer = 0f;
             _jumpBufferCounter = 0f;
+            Jump();
         }
         if (Input.GetKeyUp(KeyCode.Space) && playerRigidbody.velocity.x > 0f)
         {
@@ -158,15 +165,14 @@ public class PlayerMovement : MonoBehaviour
         {
             return;
         }
-        landingParticles.Play();
+        Invoke(nameof(PlayLandingParticles), .1f);
         animator.SetFloat(YVelF, _yVelocity);
         _yVelocity = 0f;
-        if (_grounded)
-        {
-            return;
-        }
-        //_canMove = false;
-        //Invoke(nameof(AllowMove), .5f);
+    }
+
+    private void PlayLandingParticles()
+    {
+        landingParticles.Play();
     }
 
     private void AllowMove()
@@ -197,5 +203,13 @@ public class PlayerMovement : MonoBehaviour
         {
             Instance = null;
         }
+    }
+
+    public void Die()
+    {
+        animator.SetBool(Dead, true);
+        _canMove = false;
+        playerRigidbody.constraints = RigidbodyConstraints.FreezeRotation | RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezePositionZ;
+        Time.timeScale = .5f;
     }
 }
