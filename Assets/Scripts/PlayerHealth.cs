@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using Random = UnityEngine.Random;
 
 public class PlayerHealth : MonoBehaviour
 {
@@ -10,6 +11,9 @@ public class PlayerHealth : MonoBehaviour
     [SerializeField] private int maxHealth = 10;
 
     [SerializeField] private PlayerHealthUI playerHealthUI;
+    [SerializeField] private AudioSource healthAudioSource;
+
+    [SerializeField] private List<AudioClip> healingSounds = new List<AudioClip>();
 
     private bool _invulnerable = false;
     private bool _isDead = false;
@@ -54,6 +58,8 @@ public class PlayerHealth : MonoBehaviour
         playerHealthUI.RefreshHealth(health);
         
         // PLAY HEALING SOUND
+        AudioClip randomClip = healingSounds[Random.Range(0, healingSounds.Count)];
+        healthAudioSource.PlayOneShot(randomClip);
     }
 
     private void StopInvulnerable()
