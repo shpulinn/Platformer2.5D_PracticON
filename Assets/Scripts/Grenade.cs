@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
 
@@ -8,13 +5,13 @@ public class Grenade : MonoBehaviour
 {
     [SerializeField] private float timeToDestroy = 3f;
     [SerializeField] private ParticleSystem explosionParticles;
+    [SerializeField] private AudioClip explosionSound;
     [SerializeField] private int damage;
     [SerializeField] private float explosionDamageRadius = 3f;
     [SerializeField] private LayerMask layerMask;
-    
+
     private void Start()
     {
-        //Destroy(gameObject, timeToDestroy);
         Invoke(nameof(Explode), timeToDestroy);
     }
 
@@ -36,6 +33,8 @@ public class Grenade : MonoBehaviour
         {
             Debug.Log("No <b>particles</b> assigned to " + this.gameObject.name);
         }
+
+        AudioSource.PlayClipAtPoint(explosionSound, transform.position);
         Destroy(gameObject);
     }
 
