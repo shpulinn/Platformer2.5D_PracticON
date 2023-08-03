@@ -1,11 +1,8 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.InputSystem;
-using UnityEngine.Rendering;
-using UnityEngine.Rendering.Universal;
+using Random = UnityEngine.Random;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -18,7 +15,11 @@ public class PlayerMovement : MonoBehaviour
 
     [SerializeField] private Rigidbody playerRigidbody;
     [SerializeField] private Animator animator;
-    [SerializeField] private AudioSource jumpAudio;
+    [Header("Sounds")] [SerializeField] private AudioClip attackWhoosh;
+    //[SerializeField] private AudioSource jumpAudioSource;
+    [SerializeField] private List<AudioClip> jumpSounds = new List<AudioClip>();
+    [SerializeField] private List<AudioClip> landingSounds = new List<AudioClip>();
+    [Space]
     [SerializeField] private ParticleSystem jumpParticles;
     [SerializeField] private ParticleSystem landingParticles;
     [SerializeField] private AudioSource attackAudio;
@@ -57,6 +58,8 @@ public class PlayerMovement : MonoBehaviour
         }
 
         Time.timeScale = 1f;
+
+        //jumpAudioSource = GetComponent<AudioSource>();
     }
 
     private void Start()
@@ -111,20 +114,23 @@ public class PlayerMovement : MonoBehaviour
         animator.SetBool(Grounded, _grounded);
 
 
-        //if (EventSystem.current.IsPointerOverGameObject() == false)
-        //{
-        if (Input.GetMouseButtonDown(0))
+        if (EventSystem.current.IsPointerOverGameObject() == false)
         {
-            //attackAudio.Play();
-            animator.SetTrigger(Attack);
+            if (Input.GetMouseButtonDown(0))
+            {
+                //attackAudio.Play();
+                animator.SetTrigger(Attack);
+                AudioSource.PlayClipAtPoint(attackWhoosh, transform.position);
+            }
         }
-        //}
 
     }
 
     private void Jump ()
     {
-        //jumpAudio.Play();
+        AudioClip randomClip = jumpSounds[Random.Range(0, jumpSounds.Count)];
+        //jumpAudioSource.PlayOneShot(randomClip);
+        AudioSource.PlayClipAtPoint(randomClip, transform.position);
         animator.SetTrigger(JumpTrig);
         jumpParticles.Play();
         playerRigidbody.AddForce(0, jumpForce, 0, ForceMode.VelocityChange);
@@ -166,6 +172,9 @@ public class PlayerMovement : MonoBehaviour
             return;
         }
         Invoke(nameof(PlayLandingParticles), .1f);
+        AudioClip randomClip = landingSounds[Random.Range(0, landingSounds.Count)];
+        //jumpAudioSource.PlayOneShot(randomClip);
+        AudioSource.PlayClipAtPoint(randomClip, transform.position);
         animator.SetFloat(YVelF, _yVelocity);
         _yVelocity = 0f;
     }
