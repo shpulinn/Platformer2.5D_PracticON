@@ -76,6 +76,7 @@ MonoBehaviour:
   timeToDestroy: 3
   explosionParticles: {fileID: 198383059990825712, guid: 06125a42dd5926d4caaa097abe2b8d34,
     type: 3}
+  explosionSound: {fileID: 8300000, guid: b58742da7aff7364a85e754afdcf3d6e, type: 3}
   damage: 4
   explosionDamageRadius: 3
   layerMask:
