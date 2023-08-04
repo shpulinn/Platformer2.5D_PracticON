@@ -14,7 +14,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &6510700088276650328
 Transform:
@@ -45,6 +45,10 @@ PrefabInstance:
     - target: {fileID: 1882585320748724, guid: 348818f667510814d849561cb9b1707b, type: 3}
       propertyPath: m_Name
       value: SM_Wep_Grenade_Ball_01 (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 1882585320748724, guid: 348818f667510814d849561cb9b1707b, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 4907947993721736, guid: 348818f667510814d849561cb9b1707b, type: 3}
       propertyPath: m_RootOrder
@@ -125,6 +129,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Wep_Grenade_Ball_01
       objectReference: {fileID: 0}
+    - target: {fileID: 1882585320748724, guid: 348818f667510814d849561cb9b1707b, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 4907947993721736, guid: 348818f667510814d849561cb9b1707b, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -203,6 +211,10 @@ PrefabInstance:
     - target: {fileID: 1882585320748724, guid: 348818f667510814d849561cb9b1707b, type: 3}
       propertyPath: m_Name
       value: SM_Wep_Grenade_Ball_01 (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 1882585320748724, guid: 348818f667510814d849561cb9b1707b, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 4907947993721736, guid: 348818f667510814d849561cb9b1707b, type: 3}
       propertyPath: m_RootOrder
