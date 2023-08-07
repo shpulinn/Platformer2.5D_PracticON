@@ -11,6 +11,7 @@ public class GameInput : MonoBehaviour
     public PlayerInputActions playerInputActions => _playerInputActions;
     
     public event EventHandler OnJumpAction;
+    public event EventHandler OnPauseAction;
     
     private void Awake()
     {
@@ -19,6 +20,20 @@ public class GameInput : MonoBehaviour
         _playerInputActions.Player.Enable();
         
         _playerInputActions.Player.Jump.performed += Jump_Performed;
+        
+        _playerInputActions.Player.Pause.performed += Pause_Performed;
+    }
+
+    private void OnDisable()
+    {
+        _playerInputActions.Player.Jump.performed -= Jump_Performed;
+        
+        _playerInputActions.Player.Pause.performed -= Pause_Performed;
+    }
+
+    private void Pause_Performed(InputAction.CallbackContext obj)
+    {
+        OnPauseAction?.Invoke(this, EventArgs.Empty);
     }
 
     private void Jump_Performed(InputAction.CallbackContext obj)
