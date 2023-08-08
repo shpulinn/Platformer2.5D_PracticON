@@ -18,6 +18,8 @@ public class PlayerHealth : MonoBehaviour
     private bool _invulnerable = false;
     private bool _isDead = false;
 
+    private PlayerMovement _playerMovement;
+
     public UnityEvent OnTakeDamageEvent;
     public UnityEvent OnDieEvent;
 
@@ -26,13 +28,14 @@ public class PlayerHealth : MonoBehaviour
 
     private void Start()
     {
+        _playerMovement = GetComponent<PlayerMovement>();
         playerHealthUI.Setup(maxHealth);
         playerHealthUI.RefreshHealth(health);
     }
 
     public void TakeDamage(int damage)
     {
-        if (!_invulnerable)
+        if (!_invulnerable && _playerMovement.IsBlocking == false)
         {
             health -= damage;
             playerHealthUI.RefreshHealth(health);
