@@ -34,6 +34,9 @@ public class PlayerMovement : MonoBehaviour
     private bool _jumpPressed = false;
     private float _yVelocity;
     private bool _canMove = true;
+    private bool _attacking = false;
+    private bool _canAttack = true;
+    private bool _isBlocking = false;
 
     private float _normalWalkSpeed = 3f;
     private static readonly int YVelF = Animator.StringToHash("yVel_f");
@@ -45,6 +48,14 @@ public class PlayerMovement : MonoBehaviour
     private static readonly int Dead = Animator.StringToHash("Dead");
 
     public static PlayerMovement Instance { get; private set; }
+
+    public bool IsBlocking => _isBlocking;
+
+    public bool CanAttack
+    {
+        get { return _canAttack; }
+        set { _canAttack = value; }
+    }
 
     private void Awake ()
     {
@@ -65,6 +76,42 @@ public class PlayerMovement : MonoBehaviour
     private void Start()
     {
         gameInput.OnJumpAction += GameInputOnOnJumpAction;
+        gameInput.OnAttackAction += GameInputOnOnAttackAction;
+        gameInput.OnBlockActionPerformed += GameInputOnOnBlockActionPerformed;
+        gameInput.OnBlockActionCanceled += GameInputOnOnBlockActionCanceled;
+    }
+
+    private void GameInputOnOnBlockActionCanceled(object sender, EventArgs e)
+    {
+        animator.SetBool("Block", false);
+        _isBlocking = false;
+        _canMove = true;
+    }
+
+    private void GameInputOnOnBlockActionPerformed(object sender, EventArgs e)
+    {
+        if (_grounded == false)
+        {
+            return;
+        }
+        animator.SetBool("Block", true);
+        _isBlocking = true;
+        _canMove = false;
+    }
+
+    private void GameInputOnOnAttackAction(object sender, EventArgs e)
+    {
+        AttackHandler();
+    }
+
+    private void AttackHandler()
+    {
+        _attacking = true;
+    }
+
+    public void StopAttack()
+    {
+        _canAttack = true;
     }
 
     private void GameInputOnOnJumpAction(object sender, EventArgs e)
@@ -116,11 +163,16 @@ public class PlayerMovement : MonoBehaviour
 
         if (EventSystem.current.IsPointerOverGameObject() == false)
         {
-            if (Input.GetMouseButtonDown(0))
+            if (_canAttack == false)
             {
-                //attackAudio.Play();
+                return;
+            }
+            if (_attacking && _grounded)
+            {
                 animator.SetTrigger(Attack);
                 AudioSource.PlayClipAtPoint(attackWhoosh, transform.position);
+                _attacking = false;
+                _canAttack = false;
             }
         }
 
