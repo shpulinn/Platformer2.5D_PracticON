@@ -45766,7 +45766,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: SCI-FI RUSH
+  m_text: SCI-FI RUN
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: bb183c621cde7644f93d6e41b5f49cff, type: 2}
   m_sharedMaterial: {fileID: -6450467913691639219, guid: bb183c621cde7644f93d6e41b5f49cff,
