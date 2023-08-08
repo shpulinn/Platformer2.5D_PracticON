@@ -27,6 +27,8 @@ public class SoundSettings : MonoBehaviour
         volumeSlider.value = AudioListener.volume;
         AudioListener.pause = PlayerPrefs.GetInt("MuteSounds", 0) != 0;
         muteToggle.isOn = AudioListener.pause;
+        
+        gameObject.SetActive(false);
     }
 
     public void AllSoundsToggle(bool value)
